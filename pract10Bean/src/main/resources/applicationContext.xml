@@ -1,0 +1,9 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean id="Junior" class="com.example.pract10bean.Junior"/>
+    <bean id="Middle" class="com.example.pract10bean.Middle"/>
+    <bean id="Senior" class="com.example.pract10bean.Senior"/>
+</beans>

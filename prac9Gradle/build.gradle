@@ -1,0 +1,50 @@
+plugins {
+    id 'java'
+}
+
+group = 'org.example'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+task buildDocker(type: Exec) {
+    commandLine 'docker', 'build', '-t', 'my-app-image', '.'
+}
+
+task runAppContainer(type: Exec, dependsOn: buildDocker) {
+    commandLine 'docker', 'run', '-p', '8080:8080', 'my-app-image'
+}
+
+jar {
+    from {
+        configurations.runtimeClasspath.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+
+    manifest {
+        attributes 'Main-Class': 'org.example.Main'
+    }
+
+    doLast {
+        copy {
+            from jar
+            into 'docker/'
+        }
+    }
+}
+
+afterEvaluate {
+    runAppContainer.dependsOn jar
+}
